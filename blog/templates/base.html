@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+      {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
+
+   {% block title %}
+    <title>EasyBlogging</title>
+   {% endblock title %}
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" ></script>
+       <link href="fonts/font-awesome.min.css" rel="stylesheet" />
+
+    <script>
+      tinymce.init({forced_root_block : false,
+        selector: '#formcontent',
+
+
+      });
+      tinymce.init({forced_root_block : false,
+        selector: '#id_content',
+
+
+      });
+    </script>
+
+    <style>
+
+  footer {
+    clear: both;
+    position: relative;
+    height: 100%;
+    margin-top: 0%;
+
+}
+</style>
+  </head>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark shadow">
+     <div class="container-fluid">
+  <a class="navbar-brand text-white" href="#">Blogging</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link text-white" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+       {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link text-white" href="/">{{request.user}}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-primary text-white " href="post_blog ">Post Blog</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-info text-white mx-2" href="logout">Logout</a>
+      </li>
+             {% if user.id == blog.author_id %}
+      <li class="nav-item">
+        <a class="nav-link btn btn-warning text-white mx-1" href="/edit/{{blog.id}}">Edit</a>
+      </li>
+     <li class="nav-item">
+        <a class="nav-link btn btn-danger mx-1" href="/delete/{{blog.id}}">Delete</a>
+      </li>
+        {% endif %}
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link btn btn-success text-white mx-4" href="{% url 'login'%}">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn btn-info text-white" href="{% url 'register'%}">Register</a>
+      </li>
+      {% endif %}
+      <li><a class="nav-link " style="color:#33FF3C; display: inline-block;margin-left:275px" href="{% url 'ABOUT'%}">ABOUT</a></li>
+        <li><a class="nav-link " style="color:#33FF3C; display: inline-block;" href="{% url 'FEEDBACK'%}">FEEDBACK</a></li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" action="{% url 'home' %}">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name= 'q'>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+     </div>
+</nav>
+
+{%block content%}
+
+    {% endblock %}
+
+   <footer class="bg-dark p-2">
+     <p class="text-center text-white "> All rights reserved Blogging</p>
+
+  </footer>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper)
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    -->
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"</script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"</script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="{% static 'js/owl.carousel.min.js'%}"></script>
+
+<script>
+$(document).ready(function(){
+  $(".owl-carousel").owlCarousel();
+});
+</script>
+</html>

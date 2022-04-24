@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+    {% block title %}
+   <title>Edit Blog page</title>
+    {% endblock title %}
+
+{% block content %}
+<div class="container">
+
+
+    <form method="POST" class='my-3'  enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="col-md-12">
+
+           <div class="form-group">
+            <label for="exampleFormControlTextarea1">Title</label>
+            <input class="form-control" name="title" value="{{ edit_blog.title.value }} ">
+         </div>
+
+        <div class="form-group">
+          {{form.media}}
+         <label for="exampleFormControlTextarea1">Content</label>
+            {{edit_blog.content|safe}}
+            </div>
+
+            </div>
+      <div class="col-md-12">
+
+                <input type="file" name="image" class="form-control" >
+                </div>
+      <div class="form-group">
+      <label for="exampleFormControlInput1">Publish</label>
+     <input id="publish" type="checkbox" name="publish">
+  </div>
+    <input type='submit' value='Edit' class='btn btn-warning'>
+    </form>
+        <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+{% endblock  %}
