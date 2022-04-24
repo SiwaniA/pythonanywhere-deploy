@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+
+    <!-- Required meta tags -->
+
+  {% block title %}
+    <title>Blog Detail</title>
+   {% endblock title %}
+
+     {% load static %}
+
+
+{%block content%}
+     <style> .reply{ display:none; }
+     body {
+   background: url({% static 'img/istockphoto-1222097134-612x612.jpg' %});
+   background-repeat: no-repeat;
+   background-attachment: fixed;
+   background-size: 100% 100%;
+}
+  footer {
+    clear: both;
+    position: relative;
+    height: 100%;
+    margin-top: 30%;
+}
+</style>
+<div class="container">
+    <h1 class='text-center my-4'>{{blog.title}}</h1>
+
+     <div class="col-lg-12">
+
+            <div class="card shadow" style="width: 70rem;">
+
+                <div class="card-body">
+                      {% for categroy in blog.categories.all %}
+                      <h5 class="card-title">Category: {{categroy.name}}</h5>
+                      {% endfor %}
+                   <h5 class="card-title">{{blog.title}}</h5>
+                   <div class="mb-1 text-muted ">created at :-> {{blog.created_at}}</div>
+                    {% if blog.publish == True  %}
+                    <div class="mb-1 text-muted ">Published at:-> {{blog.published}}</div>
+                    {% endif %}
+                    {% if blog.publish == True  %}<p>status: Published</p>{%else %}<p>status: In_draft</p> {% endif %}
+                   <b>Posted by:-> {{blog.author}}</b>
+                   <p class="card-text">{{blog.content|safe}}</p>
+                   <img src="{{ blog.image.url }}"class="responsive-img" alt="{{blog.title}}"style="width: 35%;margin-bottom: 20px;">
+                    <br>
+                    {{total_likes}}Like{{total_likes|pluralize}}
+                   <form action="{% url 'like_post' blog.id %}" method="POST" >
+            {% csrf_token %}
+              {% if is_liked %}
+                <button class="fa fa-thumbs-o-down btn btn-danger text-dark d-flex flex-column position-static"  type="submit" name="id" value="{{blog.id}}"{% if not user.is_authenticated %} disabled {% endif %} >Dislike</button>
+              {% else %}
+                <button  class="fa fa-thumbs-o-up btn btn-success text-dark d-flex flex-column position-static " type="submit" name="id" value="{{blog.id}}"{% if not user.is_authenticated %} disabled {% endif %} >like </button>
+              {% endif %}
+
+              </form>
+             <br/><br>
+
+
+                <form method="post" >
+                    {% csrf_token %}
+                    {{comment_form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-outline-success" {% if not user.is_authenticated %} disabled {% endif %}>
+                </form>
+
+
+              <div class="main.comment.section">
+                  {{comments.count}} Comment{{comments|pluralize }}
+                  {% for comment in comments %}
+                  <blockquote class="blockquote">
+                    <p class="mb-0">{{comment.comment}}</p>
+                      <a class="blockquote-footer">by <cite title="Source Title">{{comment.user|capfirst}}</cite> <button id="a{{comment.id}}" onclick="myFunction(this.id)">Reply</button></a>
+                  </blockquote>
+                  <div class="replied-comments container mt-2"
+                     {% for reply in comment.replies.all %}
+                      <blockquote class="blockquote">
+                    <p class="mb-0"><small>{{reply.comment}}</small></p>
+                 <footer class="blockquote-footer">by <cite title="Source Title">{{reply.user|capfirst}}</cite></footer>
+                  </blockquote>
+                      {% endfor %}
+                  <div class="form-group row">
+                      <div class="reply" id="{{comment.id}}">
+                      <form method="post" >
+                    {% csrf_token %}
+                      <input type="hidden"   name="comment_id" value="{{comment.id}}">
+                    {{comment_form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-outline-success" {% if not user.is_authenticated %} disabled {% endif %}>
+                </form><div>
+                  <script>
+                    function myFunction(elementid) {
+                    var x = document.getElementById(elementid.slice(1));
+                     if (x.style.display === "none") {
+                         x.style.display = "block";}
+                     else {x.style.display = "none"; }
+                     }
+                  </script>
+                  <div>
+                  <div>
+                  {% endfor %}
+              </div>
+
+                </div>
+            </div>
+        </div>
+</div>
+   {% endblock content %}
+ <!--<footer class="bg-dark p-2">
+     <p class="text-center text-white "> All rights reserved Blogging</p>
+
+  </footer>-->
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper)
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>-->
+
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+    -->
+
+
+

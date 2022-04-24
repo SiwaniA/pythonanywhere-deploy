@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+    {% block title %}
+   <title>Post Blog page</title>
+    {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+   background: url({% static 'img/post.jpg' %});
+   background-repeat: no-repeat;
+   background-attachment: fixed;
+   background-size: 100% 100%;
+}
+</style>
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <strong>Message</strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<div class="container">
+<h1 class='text-center my-3'>Post Blog</h1>
+<form action='post_blog' method='POST' enctype="multipart/form-data">
+ {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Title</label>
+    <input type="text" class="form-control" id="title" name='title' placeholder="title">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Content</label>
+    <textarea class="form-control" id="formcontent" name='Content' rows="3"  ></textarea>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlInput1">Choose an Image</label>
+    <input type='file' id="exampleFormControlTextarea1" name='image'>
+  </div>
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Publish</label>
+     <input id="publish" type="checkbox" name="publish"><h5 style="display: inline-block;"> "Note:if publish is unchecked,post saved as draft,visit edit page and check publish if wish to publish"
+  </div>
+
+   <div class="form-group">
+    <label for="exampleFormControlInput1">Category</label>
+    <input type="text" list="category" class="form-control" id="categories" name='categories' placeholder="categories,you can also type in to create your own category">
+  <datalist id="category">
+     {%for cats in cat %}
+    <option value="{{cats.name}}">
+      {% endfor %}
+  </datalist>
+   </div>
+   <input type='submit' value='Post' class='btn btn-primary'>
+
+
+</form>
+
+
+{% endblock  %}

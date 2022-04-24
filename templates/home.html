@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>home page</title>
+{% endblock title %}
+{% load static %}
+
+{%block content%}
+<style>
+  body {
+   background: url({% static 'img/home.jpg' %});
+   background-repeat: no-repeat;
+   background-attachment: fixed;
+   background-size: 100% 100%;
+}
+</style>
+{% for message in messages %}
+<div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+  <strong>Message</strong> {{message}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %}
+<div class="owl-carousel">
+    {% for cat in cats %}
+    <div class="card item  " style="width: 8rem;background-color: #EFFFFB;">
+            <div class="card-content">
+
+                <div class="card-title text-center ">
+                    {{cat.name}}
+                </div>
+            </div>
+   </div>
+ {%endfor%}
+</div>
+
+  <div class="container mt-4 mb-4">
+      <h3 class="mb-1 " style="color:#6610f2;">Read Top Stories...............</h3>
+
+
+       <div class="row mb-1 my-1 mx-1">
+ {% for blog in blogs %}
+      <div class="col-md-6">
+      <div class="col p-5 d-flex flex-column position-static">
+
+    <div class="card shadow "style="width: 22rem;">
+        <div class="card-body">
+             {% for categroy in blog.categories.all %}
+            <h5 class="card-title">Category: {{categroy.name}}</h5>
+            {% endfor %}
+           <h5 class="card-title">{{blog.title}}</h5>
+           <p class="card-text mb-auto">{{blog.content|safe|truncatewords:50}}</p>
+            <b>Posted by:-> {{blog.author}}</b>
+            <img src="{{ blog.image.url }}" class="responsive-img" alt="{{blog.title}}" style="width: 60%;margin-bottom: 20px;">
+           <br>
+           <a href="blog_detail/{{blog.id}}" style="    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;padding:10px;border-radius:5px;text-decoration:none;">view post </a>
+ {% if blog.publish == True  %} <p style="display: inline-block;margin-left: 60px;background-color: #dc3545;
+border-color: #dc3545;padding:2px;border-radius:5px;margin-bottom: -10px;"> Published </p> {% endif %}
+
+        </div>
+    </div>
+
+ </div>
+</div>
+
+           {% empty %}
+      <div class="container-fluid">
+        <h3> search item not found "{{request.get.q}}"</h3>
+      </div>
+       {% endfor %}
+      </div>
+  </div>
+<ul class="pagination">
+    {% if blogs.has_previous %}
+     <li class="page.item ">
+            <a href="?page={{blogs.previous_page_number}}"class="page-link"  >&laquo;</a>
+     </li>
+    {% endif %}
+    {% for b in page_range %}
+      {% if blogs.number == b %}
+        <li class="page.item active">
+            <a href="?page={{b}}"class="page-link" >{{b}}</a>
+        </li>
+      {% else %}
+        <li class="page.item ">
+            <a href="?page={{b}}"class="page-link" >{{b}}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+     {% if blogs.has_next %}
+     <li class="page.item ">
+            <a href="?page={{blogs.next_page_number}}"class="page-link"  >&raquo;</a>
+     </li>
+    {% endif %}
+
+
+</ul>
+
+{% endblock %}
+
